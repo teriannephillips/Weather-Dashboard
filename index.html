@@ -14,16 +14,26 @@
 <body>
     <div class="columns">
         <div class="left-column">
-            <h2>Search for a city: </h2>
             <form>
+                <label for="city">City:</label>
                 <input type="text" id="city" name="city">
+                <label for="country">Country:</label>
+                <input type="text" id="country" name="country">
                 <br>
                 <input id = submit-button type="submit" value="Search">
             </form>
             <p></p>
         </div>
         <div class="right-column">
-            <p id = "p">test</p>
+            <p id = "current-data">
+                <ul>
+                    <h2><li id = current-city></li></h2>
+                    <li id = current-temp></li>
+                    <li id = current-wind></li>
+                    <li id = current-humidity></li>
+                </ul>
+            </p>
+            <p id = "future-data"></p>
         </div>
     </div>
     <script src="./assets/script/script.js"></script>
