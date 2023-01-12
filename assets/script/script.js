@@ -8,15 +8,17 @@ var formSubmit = function (event) {
     var countryName = countryNameEl.value.trim();
     if (!countryName) {
         if (cityName) {
-            getLatLong(cityName);
+            getLatLong(cityName, countryName);
             // TODO: fix line below
             city.textContent = "";
-        } 
+        }
         else {
             alert('Please enter a city name');
         }
     }
-    else { 
+    else {
+        // TODO: fix line below
+        country.textContent = "";
         var data;
         fetch('./assets/script/countrycodes.json')
             .then(function (response) {
@@ -30,49 +32,62 @@ var formSubmit = function (event) {
             });
         var getAlpha2 = function (data, countryName) {
             console.log(countryName);
+            var countryValid = false;
             for (var i = 0; i < data.length; i++) {
                 if (countryName == data[i].name) {
-                    console.log(data[i].iso_3166.alpha2);
                     var alpha2 = data[i].iso_3166.alpha2;
+                    countryValid = true;
+                    getLatLong(cityName, alpha2);
                 }
+            }
+            if (!countryValid) {
+                alert('Please enter a valid country name');
             }
         }
     }
 }
-    var getLatLong = function (cityName) {
-        requestGeoUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + cityName + ',&appid=ee49752bfcbda8b1754a678bc148b71a';
-        fetch(requestGeoUrl)
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function (data) {
-                console.log(data);
+var getLatLong = function (cityName, countryName) {
+    requestGeoUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + cityName + ',' + countryName + '&appid=ee49752bfcbda8b1754a678bc148b71a';
+    fetch(requestGeoUrl)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            console.log(data);
+            if (data.length == 0) {
+                alert('Please enter a valid city name');
+            }
+            else {
                 var lat = data[0].lat;
                 var lon = data[0].lon;
+                var dataCity = data[0].name;
+                var dataCountry = data[0].country;
                 console.log(lat);
                 console.log(lon);
-                getCurrentCityData(lat, lon);
-            });
-        var getCurrentCityData = function (lat, lon) {
-            requestUrl = 'https://api.openweathermap.org/data/2.5/weather?lat=' + lat + '&lon=' + lon + '&units=metric&appid=ee49752bfcbda8b1754a678bc148b71a';
-            fetch(requestUrl)
-                .then(function (response) {
-                    return response.json();
-                })
-                .then(function (data) {
-                    console.log(data);
-                    var today = new Date();
-                    var dd = String(today.getDate()).padStart(2, '0');
-                    var mm = String(today.getMonth() + 1).padStart(2, '0');
-                    var yyyy = today.getFullYear();
-                    today = mm + '/' + dd + '/' + yyyy;
-                    document.getElementById("current-city").innerHTML = cityName + " " + today;
-                    document.getElementById("current-temp").innerHTML = "Temperature " + data.main.temp + " C";
-                    document.getElementById("current-wind").innerHTML = "Wind  " + data.wind.speed + " m/s";
-                    document.getElementById("current-humidity").innerHTML = "Humidity  " + data.main.humidity + " %";
-                    console.log(data.main.humidity);
-                });
-        }
+                console.log(dataCity);
+                console.log(dataCountry);
+                getCurrentCityData(lat, lon, dataCity, dataCountry);
+            }
+        });
 }
-    formEl.addEventListener('submit', formSubmit);
-    //requestUrl = 'https://api.openweathermap.org/data/2.5/forecast?lat=' + lat + '&lon=' + lon + '&appid=ee49752bfcbda8b1754a678bc148b71a';
+var getCurrentCityData = function (lat, lon, dataCity, dataCountry) {
+    requestUrl = 'https://api.openweathermap.org/data/2.5/weather?lat=' + lat + '&lon=' + lon + '&units=metric&appid=ee49752bfcbda8b1754a678bc148b71a';
+    fetch(requestUrl)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            console.log(data);
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0');
+            var yyyy = today.getFullYear();
+            today = mm + '/' + dd + '/' + yyyy;
+            document.getElementById("current-city").innerHTML = dataCity + " " + dataCountry + " " + today;
+            document.getElementById("current-temp").innerHTML = "Temperature " + data.main.temp + " C";
+            document.getElementById("current-wind").innerHTML = "Wind  " + data.wind.speed + " m/s";
+            document.getElementById("current-humidity").innerHTML = "Humidity  " + data.main.humidity + " %";
+            console.log(data.main.humidity);
+        });
+}
+formEl.addEventListener('submit', formSubmit);
