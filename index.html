@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-    
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Weather Dashboard</title>
     <link rel="stylesheet" href="./assets/css/reset.css" />
     <link rel="stylesheet" href="./assets/css/style.css" />
-  </head>
+</head>
 <header>
     <h1>Weather Dashboard</h1>
 </header>
+
 <body>
     <div class="columns">
         <div class="left-column">
@@ -20,22 +21,38 @@
                 <label for="country">Country: (optional)</label>
                 <input type="text" id="country" name="country">
                 <br>
-                <input id = submit-button type="submit" value="Search">
+                <input id=submit-button type="submit" value="Search">
             </form>
-            <p></p>
+            <ol id=recent-searches class=recentSearches></ol>
         </div>
         <div class="right-column">
-            <p id = "current-data">
-                <ul>
-                    <h2><li id = current-city></li></h2>
-                    <li id = current-temp></li>
-                    <li id = current-wind></li>
-                    <li id = current-humidity></li>
-                </ul>
+            <p id="current-data">
+            <ul>
+                <h2>
+                    <li id=current-city></li>
+                </h2>
+                <li id=current-temp></li>
+                <li id=current-wind></li>
+                <li id=current-humidity></li>
+            </ul>
             </p>
-            <p id = "future-data"></p>
+            <h2 id ="ForecastTitle"> </h2>
+            <div class="forecast-columns">
+
+                <div class="column-one" id = forecast-one>
+                </div>
+                <div class="column-two" id = forecast-two>
+                </div>
+                <div class="column-three" id = forecast-three>
+                </div>
+                <div class="column-four" id = forecast-four>
+                </div>
+                <div class="column-five" id = forecast-five>
+                </div>
+            </div>
         </div>
     </div>
     <script src="./assets/script/script.js"></script>
 </body>
+
 </html>

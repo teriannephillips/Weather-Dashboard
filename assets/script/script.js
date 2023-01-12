@@ -1,4 +1,3 @@
-
 var formEl = document.querySelector('form');
 var formSubmit = function (event) {
     event.preventDefault();
@@ -67,6 +66,8 @@ var getLatLong = function (cityName, countryName) {
                 console.log(dataCity);
                 console.log(dataCountry);
                 getCurrentCityData(lat, lon, dataCity, dataCountry);
+                getForecastData(lat, lon);
+                recentSearches(dataCity, dataCountry);
             }
         });
 }
@@ -87,7 +88,41 @@ var getCurrentCityData = function (lat, lon, dataCity, dataCountry) {
             document.getElementById("current-temp").innerHTML = "Temperature " + data.main.temp + " C";
             document.getElementById("current-wind").innerHTML = "Wind  " + data.wind.speed + " m/s";
             document.getElementById("current-humidity").innerHTML = "Humidity  " + data.main.humidity + " %";
-            console.log(data.main.humidity);
+
         });
 }
 formEl.addEventListener('submit', formSubmit);
+
+function recentSearches(dataCity, dataCountry) {
+    //TODO: local storage of recent searches and display them on the screen    
+}
+
+// get 5 day weather data 
+var getForecastData = function (lat, lon) {
+    requestUrl = 'https://api.openweathermap.org/data/2.5/forecast?lat=' + lat + '&lon=' + lon + '&units=metric&appid=ee49752bfcbda8b1754a678bc148b71a';
+    fetch(requestUrl)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            extractForecastData(data);
+        });
+}
+var extractForecastData = function (data) {
+    console.log(data.list.length);
+
+    for (var i = 0; i < data.list.length; i++) {
+        var dt = data.list[i].dt_txt;
+        var time = dt.split(' ')[1];
+        var date = dt.split(' ')[0];
+        if (time == "09:00:00") {
+            var forecast = document.getElementById("ForecastTitle");
+            forecast.innerHTML = "5 day Forecast";
+
+            
+        }
+
+
+    }
+
+}
