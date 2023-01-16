@@ -56,7 +56,7 @@ var formSubmit = function (event) {
     }
 }
 var getLatLong = function (cityName, countryName) {
-    requestGeoUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + cityName + ',' + countryName + '&appid=ee49752bfcbda8b1754a678bc148b71a';
+    requestGeoUrl = 'https://api.openweathermap.org/geo/1.0/direct?q=' + cityName + ',' + countryName + '&appid=ee49752bfcbda8b1754a678bc148b71a';
     fetch(requestGeoUrl)
         .then(function (response) {
             return response.json();
