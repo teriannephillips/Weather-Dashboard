@@ -5,6 +5,7 @@ for (var i = 0; i < 5; i++) {
     columnHide = document.getElementById(forecastVar);
     columnHide.setAttribute("style", "background-color: rgb(67, 1, 67)");
 }
+// pulls the user data from cityname and optional country name and runs the function to get the data from the api
 var formEl = document.querySelector('form');
 var formSubmit = function (event) {
     event.preventDefault();
@@ -37,7 +38,7 @@ var formSubmit = function (event) {
                 }
             });
         var getAlpha2 = function (data, countryName) {
-            console.log(countryName);
+            // console.log(countryName);
             var countryValid = false;
             for (var i = 0; i < data.length; i++) {
                 if (countryName == data[i].name) {
@@ -59,7 +60,7 @@ var getLatLong = function (cityName, countryName) {
             return response.json();
         })
         .then(function (data) {
-            console.log(data);
+            // console.log(data);
             if (data.length == 0) {
                 alert('Please enter a valid city name');
             }
@@ -68,10 +69,10 @@ var getLatLong = function (cityName, countryName) {
                 var lon = data[0].lon;
                 var dataCity = data[0].name;
                 var dataCountry = data[0].country;
-                console.log(lat);
-                console.log(lon);
-                console.log(dataCity);
-                console.log(dataCountry);
+                //  console.log(lat);
+                //  console.log(lon);
+                //  console.log(dataCity);
+                //  console.log(dataCountry);
                 getCurrentCityData(lat, lon, dataCity, dataCountry);
                 getForecastData(lat, lon);
                 recentSearches(dataCity, dataCountry);
@@ -85,7 +86,7 @@ var getCurrentCityData = function (lat, lon, dataCity, dataCountry) {
             return response.json();
         })
         .then(function (data) {
-            console.log(data);
+            // console.log(data);
             var today = new Date();
             var dd = String(today.getDate()).padStart(2, '0');
             var mm = String(today.getMonth() + 1).padStart(2, '0');
@@ -100,9 +101,7 @@ var getCurrentCityData = function (lat, lon, dataCity, dataCountry) {
 }
 formEl.addEventListener('submit', formSubmit);
 
-function recentSearches(dataCity, dataCountry) {
-    //TODO: local storage of recent searches and display them on the screen    
-}
+
 
 // get 5 day weather data 
 var getForecastData = function (lat, lon) {
@@ -115,6 +114,7 @@ var getForecastData = function (lat, lon) {
             extractForecastData(data);
         });
 }
+//shows the 5 days weather data elements
 var extractForecastData = function (data) {
     var forecastVar;
     for (var i = 0; i < 5; i++) {
@@ -122,7 +122,6 @@ var extractForecastData = function (data) {
         columnShow = document.getElementById(forecastVar);
         columnShow.setAttribute("style", "backgroundcolor:white");
     }
-    console.log(data.list.length);
     var forecast = document.getElementById("ForecastTitle");
     forecast.innerHTML = "5 day Forecast";
     newIndex = 0;
@@ -130,14 +129,14 @@ var extractForecastData = function (data) {
         var dt = data.list[i].dt_txt;
         var time = dt.split(' ')[1];
         var date = dt.split(' ')[0];
-
+        //since 5 day weather data gives information in 3 hour increments was advised by TA to pick one time for each day and display that info only
         if (time == "09:00:00") {
             var dateCode = "date-" + newIndex;
             var tempCode = "temp-" + newIndex;
             var windCode = "wind-" + newIndex;
             var humidityCode = "humidity-" + newIndex;
-            console.log(data);
-            console.log(data.list[i].main.temp)
+            //  console.log(data);
+            //   console.log(data.list[i].main.temp)
             newIndex++;
             var dateEl = document.getElementById(dateCode);
             var tempEl = document.getElementById(tempCode);
@@ -149,4 +148,27 @@ var extractForecastData = function (data) {
             humidityEl.innerHTML = "Humidity: " + data.list[i].main.humidity + " %"
         }
     }
+}
+function recentSearches(dataCity, dataCountry) {
+    //TODO: local storage of recent searches and display them on the screen  
+    var recentSearch = JSON.parse(localStorage.getItem('recentSearch')) || [];
+    var arrayCheck = true;
+    for (var i = 0; i < recentSearch.length; i++){
+        if (recentSearch[i].city == dataCity && recentSearch[i].country == dataCountry) {
+            console.log ("already submitted");
+           arrayCheck = false;
+        }
+    }
+if (arrayCheck){
+    console.log("added to array")
+    recentSearch.push({ city: dataCity, country: dataCountry });
+    localStorage.setItem("recentSearch", JSON.stringify(recentSearch));
+}
+    // for (let i = 0; i < highScores.length; i++) {
+    //     answerP.setAttribute("style", "margin-left: 40vh; text-align:left");
+    //     answerP.innerHTML += highScores[i].initials + " " + highScores[i].score + "<br/>";
+    // }
+    // submit = document.getElementById("submit-button");
+    // submit.className = "button-styling";
+    // return false;
 }
