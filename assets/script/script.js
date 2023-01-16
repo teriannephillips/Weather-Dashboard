@@ -62,7 +62,7 @@ var getLatLong = function (cityName, countryName) {
             return response.json();
         })
         .then(function (data) {
-            // console.log(data);
+           // console.log(data);
             if (data.length == 0) {
                 alert('Please enter a valid city name');
             }
@@ -90,13 +90,16 @@ var getCurrentCityData = function (lat, lon, dataCity, dataCountry) {
             return response.json();
         })
         .then(function (data) {
-            // console.log(data);
+           // console.log(data);
             var today = new Date();
             var dd = String(today.getDate()).padStart(2, '0');
             var mm = String(today.getMonth() + 1).padStart(2, '0');
             var yyyy = today.getFullYear();
             today = mm + '/' + dd + '/' + yyyy;
+            var icon = data.weather[0].icon;
+        //    console.log(icon);
             document.getElementById("current-city").innerHTML = dataCity + " " + dataCountry + " " + today;
+            document.getElementById("current-icon").src = "https://openweathermap.org/img/w/" + icon + ".png";
             document.getElementById("current-temp").innerHTML = "Temperature " + data.main.temp + " C";
             document.getElementById("current-wind").innerHTML = "Wind  " + data.wind.speed + " m/s";
             document.getElementById("current-humidity").innerHTML = "Humidity  " + data.main.humidity + " %";
@@ -136,17 +139,20 @@ var extractForecastData = function (data) {
         //since 5 day weather data gives information in 3 hour increments was advised by TA to pick one time for each day and display that info only
         if (time == "09:00:00") {
             var dateCode = "date-" + newIndex;
+            var iconCode = "icon-" + newIndex;
             var tempCode = "temp-" + newIndex;
             var windCode = "wind-" + newIndex;
             var humidityCode = "humidity-" + newIndex;
-            //  console.log(data);
-            //   console.log(data.list[i].main.temp)
+            console.log(data);
+            var icon = data.list[i].weather[0].icon;
             newIndex++;
             var dateEl = document.getElementById(dateCode);
+            var iconEl = document.getElementById(iconCode);
             var tempEl = document.getElementById(tempCode);
             var windEl = document.getElementById(windCode);
             var humidityEl = document.getElementById(humidityCode);
             dateEl.innerHTML = date;
+            iconEl.src = "https://openweathermap.org/img/w/" + icon + ".png";
             tempEl.innerHTML = "Temp: " + data.list[i].main.temp + " C";
             windEl.innerHTML = "Wind: " + data.list[i].wind.speed + " m/s";
             humidityEl.innerHTML = "Humidity: " + data.list[i].main.humidity + " %"
