@@ -18,16 +18,15 @@ var formSubmit = function (event) {
     if (!countryName) {
         if (cityName) {
             getLatLong(cityName, countryName);
-            // TODO: fix line below
-            city.textContent = "";
+            cityNameEl.value = "";
         }
         else {
             alert('Please enter a city name');
         }
     }
     else {
-        // TODO: fix line below
-        country.textContent = "";
+        cityNameEl.value = "";
+        countryNameEl.value = "";
         var data;
         fetch('./assets/script/countrycodes.json')
             .then(function (response) {
@@ -62,7 +61,6 @@ var getLatLong = function (cityName, countryName) {
             return response.json();
         })
         .then(function (data) {
-           // console.log(data);
             if (data.length == 0) {
                 alert('Please enter a valid city name');
             }
@@ -71,10 +69,6 @@ var getLatLong = function (cityName, countryName) {
                 var lon = data[0].lon;
                 var dataCity = data[0].name;
                 var dataCountry = data[0].country;
-                //  console.log(lat);
-                //  console.log(lon);
-                //  console.log(dataCity);
-                //  console.log(dataCountry);
                 getCurrentCityData(lat, lon, dataCity, dataCountry);
                 getForecastData(lat, lon);
                 recentSearches(dataCity, dataCountry);
@@ -90,14 +84,12 @@ var getCurrentCityData = function (lat, lon, dataCity, dataCountry) {
             return response.json();
         })
         .then(function (data) {
-           // console.log(data);
             var today = new Date();
             var dd = String(today.getDate()).padStart(2, '0');
             var mm = String(today.getMonth() + 1).padStart(2, '0');
             var yyyy = today.getFullYear();
             today = mm + '/' + dd + '/' + yyyy;
             var icon = data.weather[0].icon;
-        //    console.log(icon);
             document.getElementById("current-city").innerHTML = dataCity + " " + dataCountry + " " + today;
             document.getElementById("current-icon").src = "https://openweathermap.org/img/w/" + icon + ".png";
             document.getElementById("current-temp").innerHTML = "Temperature " + data.main.temp + " C";
@@ -143,7 +135,6 @@ var extractForecastData = function (data) {
             var tempCode = "temp-" + newIndex;
             var windCode = "wind-" + newIndex;
             var humidityCode = "humidity-" + newIndex;
-            console.log(data);
             var icon = data.list[i].weather[0].icon;
             newIndex++;
             var dateEl = document.getElementById(dateCode);
