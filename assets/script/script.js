@@ -5,6 +5,8 @@ for (var i = 0; i < 5; i++) {
     columnHide = document.getElementById(forecastVar);
     columnHide.setAttribute("style", "background-color: rgb(67, 1, 67)");
 }
+recentSearchDisplay();
+recentSearchButtonClicked();
 // pulls the user data from cityname and optional country name and runs the function to get the data from the api
 var formEl = document.querySelector('form');
 var formSubmit = function (event) {
@@ -76,6 +78,8 @@ var getLatLong = function (cityName, countryName) {
                 getCurrentCityData(lat, lon, dataCity, dataCountry);
                 getForecastData(lat, lon);
                 recentSearches(dataCity, dataCountry);
+
+
             }
         });
 }
@@ -149,26 +153,44 @@ var extractForecastData = function (data) {
         }
     }
 }
-function recentSearches(dataCity, dataCountry) {
-    //TODO: local storage of recent searches and display them on the screen  
+//function that creates the recent searches and saves to local storage
+function recentSearches(dataCity, dataCountry) { 
     var recentSearch = JSON.parse(localStorage.getItem('recentSearch')) || [];
     var arrayCheck = true;
-    for (var i = 0; i < recentSearch.length; i++){
+    for (var i = 0; i < recentSearch.length; i++) {
         if (recentSearch[i].city == dataCity && recentSearch[i].country == dataCountry) {
-            console.log ("already submitted");
-           arrayCheck = false;
+            arrayCheck = false;
         }
     }
-if (arrayCheck){
-    console.log("added to array")
-    recentSearch.push({ city: dataCity, country: dataCountry });
-    localStorage.setItem("recentSearch", JSON.stringify(recentSearch));
+    if (arrayCheck) {
+        recentSearch.push({ city: dataCity, country: dataCountry });
+        localStorage.setItem("recentSearch", JSON.stringify(recentSearch));
+        var recentSearchesEl = document.getElementById("recent-searches")
+        var recentEl = document.createElement('button');
+        recentEl.className = "button";
+        recentEl.innerHTML = dataCity + ", " + dataCountry;
+        recentSearchesEl.appendChild(recentEl);
+    }
 }
-    // for (let i = 0; i < highScores.length; i++) {
-    //     answerP.setAttribute("style", "margin-left: 40vh; text-align:left");
-    //     answerP.innerHTML += highScores[i].initials + " " + highScores[i].score + "<br/>";
-    // }
-    // submit = document.getElementById("submit-button");
-    // submit.className = "button-styling";
-    // return false;
+// function to display the recent searches
+function recentSearchDisplay() {
+    var recentSearch = JSON.parse(localStorage.getItem('recentSearch')) || [];
+    var recentSearchesEl = document.getElementById("recent-searches")
+    for (let i = 0; i < recentSearch.length; i++) {
+        var recentEl = document.createElement('button');
+        recentEl.innerHTML = recentSearch[i].city + ", " + recentSearch[i].country;
+        recentEl.className = "button"
+        recentSearchesEl.appendChild(recentEl);
+    }
+}
+//function to pull up data from a previous search
+function recentSearchButtonClicked() {
+    document.addEventListener("click", function (event) {
+        if (event.target.matches("button")) {
+            dataString = event.target.innerHTML;
+            var city = dataString.split(', ')[0];
+            var country = dataString.split(', ')[1];
+            getLatLong(city, country);
+        }
+    });
 }

@@ -43,7 +43,12 @@ h2 {
     background-color: white;
     color: rgb(67, 1, 67);
 }
-
+.button {
+    margin-top: 2%;
+    width: 100%;
+    background-color: lavender;
+    color: rgb(67, 1, 67);
+}
 ul {
     list-style-type: none;
     margin: 2vh;
