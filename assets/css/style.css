@@ -1,6 +1,8 @@
 * {
-    background-color: rgb(67, 1, 67);
     font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+body {
+    background-color: rgb(67, 1, 67);
     color: white;
 }
 
@@ -31,13 +33,6 @@ h2 {
     flex: 80%;
 }
 
-.hide{
-    display: none;
-}
-
-.show{
-    display: flex;
-}
 #submit-button,
 #city,
 #country {
@@ -54,16 +49,17 @@ ul {
     margin: 2vh;
 }
 
-li {
-    margin: 2vh;
-}
-
 .forecast-columns {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     width: 100%;
+    color: rgb(67, 1, 67);
+    font-size: 80%;
 }
+/* #forcast-id {
+    display:none;
+} */
 
 .column-one,
 .column-two,
@@ -73,11 +69,27 @@ li {
     background-color: white;
     width: 16%;
     margin: 1%;
-    height: 30vh;
+    height: 20vh;
+    
+} */
+.show {
+    display: flex;
+    background-color: white;
+    width: 16%;
+    margin: 1%;
+    height: 20vh;
+    
 }
-
 #ForecastTitle {
     margin-left: 3%;
     margin-top: 5%;
     margin-bottom: 2%
+}
+#date-0, #date-1, #date-2, #date-3, #date-4 {
+    font-weight: bold;
+    text-align: center;
+    margin-bottom:10%;
+}
+#temp-0, #temp-1, #temp-2, #temp-3, #temp-4, #wind-0, #wind-1, #wind-2, #wind-3, #wind-4, #humidity-0, #humidity-1, #humidity-2, #humidity-3, #humidity-4 {
+margin-bottom: 10%;
 }

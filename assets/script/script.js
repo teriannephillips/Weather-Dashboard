@@ -1,3 +1,10 @@
+//hides the 5 day forecast "cards" for later use
+var forecastVar;
+for (var i = 0; i < 5; i++) {
+    forecastVar = "forecast-" + i;
+    columnHide = document.getElementById(forecastVar);
+    columnHide.setAttribute("style", "background-color: rgb(67, 1, 67)");
+}
 var formEl = document.querySelector('form');
 var formSubmit = function (event) {
     event.preventDefault();
@@ -109,20 +116,37 @@ var getForecastData = function (lat, lon) {
         });
 }
 var extractForecastData = function (data) {
+    var forecastVar;
+    for (var i = 0; i < 5; i++) {
+        forecastVar = "forecast-" + i;
+        columnShow = document.getElementById(forecastVar);
+        columnShow.setAttribute("style", "backgroundcolor:white");
+    }
     console.log(data.list.length);
-
+    var forecast = document.getElementById("ForecastTitle");
+    forecast.innerHTML = "5 day Forecast";
+    newIndex = 0;
     for (var i = 0; i < data.list.length; i++) {
         var dt = data.list[i].dt_txt;
         var time = dt.split(' ')[1];
         var date = dt.split(' ')[0];
+
         if (time == "09:00:00") {
-            var forecast = document.getElementById("ForecastTitle");
-            forecast.innerHTML = "5 day Forecast";
-
-            
+            var dateCode = "date-" + newIndex;
+            var tempCode = "temp-" + newIndex;
+            var windCode = "wind-" + newIndex;
+            var humidityCode = "humidity-" + newIndex;
+            console.log(data);
+            console.log(data.list[i].main.temp)
+            newIndex++;
+            var dateEl = document.getElementById(dateCode);
+            var tempEl = document.getElementById(tempCode);
+            var windEl = document.getElementById(windCode);
+            var humidityEl = document.getElementById(humidityCode);
+            dateEl.innerHTML = date;
+            tempEl.innerHTML = "Temp: " + data.list[i].main.temp + " C";
+            windEl.innerHTML = "Wind: " + data.list[i].wind.speed + " m/s";
+            humidityEl.innerHTML = "Humidity: " + data.list[i].main.humidity + " %"
         }
-
-
     }
-
 }
