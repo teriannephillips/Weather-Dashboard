@@ -5,9 +5,11 @@ for (var i = 0; i < 5; i++) {
     columnHide = document.getElementById(forecastVar);
     columnHide.setAttribute("style", "background-color: rgb(67, 1, 67)");
 }
+//runs the function to display the recent searches from local storage
 recentSearchDisplay();
+//runs the function that determines which recent search button is clicked
 recentSearchButtonClicked();
-// pulls the user data from cityname and optional country name and runs the function to get the data from the api
+// pulls the user data from cityname and optional country name and runs the function to get data from the api
 var formEl = document.querySelector('form');
 var formSubmit = function (event) {
     event.preventDefault();
@@ -39,7 +41,6 @@ var formSubmit = function (event) {
                 }
             });
         var getAlpha2 = function (data, countryName) {
-            // console.log(countryName);
             var countryValid = false;
             for (var i = 0; i < data.length; i++) {
                 if (countryName == data[i].name) {
@@ -54,6 +55,7 @@ var formSubmit = function (event) {
         }
     }
 }
+// gets the lattitude and longitude for the requested cityname (and country if applicable)
 var getLatLong = function (cityName, countryName) {
     requestGeoUrl = 'https://api.openweathermap.org/geo/1.0/direct?q=' + cityName + ',' + countryName + '&appid=ee49752bfcbda8b1754a678bc148b71a';
     fetch(requestGeoUrl)
@@ -72,11 +74,10 @@ var getLatLong = function (cityName, countryName) {
                 getCurrentCityData(lat, lon, dataCity, dataCountry);
                 getForecastData(lat, lon);
                 recentSearches(dataCity, dataCountry);
-
-
             }
         });
 }
+//gets current city data using lat and lon
 var getCurrentCityData = function (lat, lon, dataCity, dataCountry) {
     requestUrl = 'https://api.openweathermap.org/data/2.5/weather?lat=' + lat + '&lon=' + lon + '&units=metric&appid=ee49752bfcbda8b1754a678bc148b71a';
     fetch(requestUrl)
@@ -98,11 +99,9 @@ var getCurrentCityData = function (lat, lon, dataCity, dataCountry) {
 
         });
 }
+//evenst listener for the search
 formEl.addEventListener('submit', formSubmit);
-
-
-
-// get 5 day weather data 
+// gets 5 day weather data using the lat and lon 
 var getForecastData = function (lat, lon) {
     requestUrl = 'https://api.openweathermap.org/data/2.5/forecast?lat=' + lat + '&lon=' + lon + '&units=metric&appid=ee49752bfcbda8b1754a678bc148b71a';
     fetch(requestUrl)
@@ -128,7 +127,7 @@ var extractForecastData = function (data) {
         var dt = data.list[i].dt_txt;
         var time = dt.split(' ')[1];
         var date = dt.split(' ')[0];
-        //since 5 day weather data gives information in 3 hour increments was advised by TA to pick one time for each day and display that info only
+//since 5 day weather data gives information in 3 hour increments was advised by TA to pick one time for each day and display that info only
         if (time == "09:00:00") {
             var dateCode = "date-" + newIndex;
             var iconCode = "icon-" + newIndex;
