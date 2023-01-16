@@ -66,14 +66,14 @@ li {
     background-color: white;
     width: 16%;
     margin: 1%;
-    height: 25vh;  
+    min-height: 25vh;  
 } */
 .show {
     display: flex;
     background-color: white;
     width: 16%;
     margin: 1%;
-    height: 20vh;  
+    min-height: 25vh;  
 }
 #ForecastTitle {
     margin-left: 3%;
